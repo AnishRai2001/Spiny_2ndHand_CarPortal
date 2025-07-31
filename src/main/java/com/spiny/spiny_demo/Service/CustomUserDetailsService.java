@@ -1,6 +1,7 @@
 package com.spiny.spiny_demo.Service;
 
 import com.spiny.spiny_demo.Repository.UserRepository;
+import com.spiny.spiny_demo.ServiceImpl.CustomUserDetails;
 import com.spiny.spiny_demo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

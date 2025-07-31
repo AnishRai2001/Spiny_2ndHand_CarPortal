@@ -3,6 +3,7 @@ package com.spiny.spiny_demo.config;
 import com.spiny.spiny_demo.Service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -45,22 +46,31 @@ public class Jwtconfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**"
-
-
-                        ).permitAll()   // allow register without auth
-                        .requestMatchers("/api/employees/**").hasRole("ADMIN")  // restrict to ADMIN role
-                        .anyRequest().authenticated()  // other endpoints require authentication
-                );
-
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         return http.build();
     }
+
+
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                )
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(
+//                                "/api/auth/**",
+//                                "/api/car/**"
+//
+//                        ).permitAll()   // allow register without auth
+//                        .requestMatchers("/api/employees/**").hasRole("ADMIN")  // restrict to ADMIN role
+//                        .anyRequest().authenticated()  // other endpoints require authentication
+//                );
+//
+//        return http.build();
+//    }
 
 
 }

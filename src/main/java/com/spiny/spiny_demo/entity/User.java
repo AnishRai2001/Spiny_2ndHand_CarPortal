@@ -3,6 +3,8 @@ package com.spiny.spiny_demo.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Table(name = "app_user") // Avoid reserved word 'user'
 @Data
@@ -28,8 +30,11 @@ public class User {
     @Column(length = 255)
     private String address;
 
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+
 
 }
