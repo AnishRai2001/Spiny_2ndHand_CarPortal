@@ -63,6 +63,8 @@ public class Car {
     private LocalDateTime createdAt;
 
 
+
+
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "listed_by_user_id", nullable = false)
 //    private User listedBy;
