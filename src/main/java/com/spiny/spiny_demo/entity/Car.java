@@ -1,9 +1,11 @@
 package com.spiny.spiny_demo.entity;
 
+import com.spiny.spiny_demo.CarStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.sql.RowSet;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -55,12 +57,26 @@ public class Car {
     @Column(name = "image_url")
     private List<String> imageUrls;
 
-    @Column(name = "status", nullable = false, length = 50)
-    private String status;  // e.g., "available", "sold", etc.
+ //   private String imageUrls;
+
+//    @Column(name = "status", nullable = false, length = 50)
+//    private String status;  // e.g., "available", "sold", etc.
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @Enumerated(EnumType.STRING)
+    private CarStatus status = CarStatus.AVAILABLE;
+
+@ManyToOne
+@JoinColumn(name = "user_id")
+private User seller;
+
+    @ManyToOne
+    @JoinColumn(name = "booked_by_user_id")
+    private User bookedBy;
+
 
 
 
