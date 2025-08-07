@@ -1,5 +1,4 @@
 package com.spiny.spiny_demo.Dto;
-
 import lombok.Data;
 
 @Data

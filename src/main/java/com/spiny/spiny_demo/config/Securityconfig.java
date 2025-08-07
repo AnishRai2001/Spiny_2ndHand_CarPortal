@@ -54,6 +54,9 @@ public class Securityconfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/cars/**").permitAll()
+                .requestMatchers("/api/crm/**").permitAll()
+                .requestMatchers("/api/agent/**").permitAll()
+                .requestMatchers("/api/area/**").permitAll()
                 .requestMatchers("/seller/**").hasRole("SELLER")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
