@@ -2,17 +2,16 @@ package com.spiny.spiny_demo.Controller;
 
 import com.spiny.spiny_demo.Dto.AreaDto;
 import com.spiny.spiny_demo.Dto.CustomerDTO;
-
 import com.spiny.spiny_demo.Repository.AgentRepository;
 import com.spiny.spiny_demo.Repository.AreaRepository;
 import com.spiny.spiny_demo.Repository.CustomerRepository;
-
+import com.spiny.spiny_demo.Service.SmsService;
 import com.spiny.spiny_demo.Structure.ResponseStructure;
 import com.spiny.spiny_demo.entity.Agent;
 import com.spiny.spiny_demo.entity.Area;
 import com.spiny.spiny_demo.entity.Customer;
-
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +21,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/crm")
 public class CrmController {
+
+    @Autowired
+    private SmsService smsService;
 
     private final AgentRepository agentRepo;
     private final AreaRepository areaRepo;
@@ -92,8 +94,20 @@ public class CrmController {
         BeanUtils.copyProperties(customerDTO, customer);
         customer.setAssignedAgent(agent);
 
-        Customer savedCustomer = customerRepo.save(customer);
+        Customer savedCustomer = customerRepo.save(customer); // Save the customer here
 
+        // Prepare the message for agent and customer
+        String agentNumber = formatPhoneNumber(agent.getMobile());
+        String customerNumber = formatPhoneNumber(customer.getMobile()); // use customer's number, not 'visit'
+
+        String agentMsg = "You have been assigned to Customer: " + savedCustomer.getId();
+        String customerMsg = "Agent " + agent.getName() + " (ID: " + agent.getId() + ") has been assigned to your visit.";
+
+        // Send SMS
+        smsService.sendSms(agentNumber, agentMsg);
+        smsService.sendSms(customerNumber, customerMsg);
+
+        // Create the response structure
         ResponseStructure<Customer> response = new ResponseStructure<>();
         response.setSuccess(true);
         response.setMessage("Customer created and assigned to agent: " + agent.getName());
@@ -122,5 +136,11 @@ public class CrmController {
         response.setData("Agent allocation completed.");
 
         return ResponseEntity.ok(response);
+    }
+
+    // Helper method for formatting phone number
+    private String formatPhoneNumber(String phoneNumber) {
+        // Ensure the phone number is in the correct format (E.164)
+        return phoneNumber != null && phoneNumber.startsWith("+") ? phoneNumber : "+" + phoneNumber;
     }
 }
